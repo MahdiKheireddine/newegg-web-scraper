@@ -8,11 +8,11 @@ This Python script allows you to scrape product information from Newegg.ca based
 
 1. Clone the repository:
    ```bash
-   git clone [<repository_URL>](https://github.com/MahdiKheireddine/newegg-web-scraper)
+   git clone (https://github.com/MahdiKheireddine/newegg-web-scraper)
 
 2. Install dependencies:
   ```bash
-  pip install -r requirements.txt
+  (pip install -r requirements.txt)
 
 3. Run the script:
   ```bash
