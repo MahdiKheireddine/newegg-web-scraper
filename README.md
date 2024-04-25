@@ -14,7 +14,6 @@ This Python script allows you to scrape product information from Newegg.ca based
    ```bash
    pip install -r requirements.txt
 
-
 3. Run the script:
    ```bash
    python main.py
