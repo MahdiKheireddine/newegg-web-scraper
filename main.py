@@ -25,7 +25,6 @@ def extract_price(price_div):
     else:
         return None
     
-
 def export_data(product_name,items_found):
     # Define the CSV file name
     csv_file = f"{product_name}_products.csv"
@@ -38,10 +37,10 @@ def export_data(product_name,items_found):
 
     print("Data exported to:", csv_file)
 
-
 def main():
     product_name = input("What product do you want to search for? ")
-
+    #product_name = "keyboard"
+    
     url = f"https://www.newegg.ca/p/pl?d={product_name}&N=4131"
     page = requests.get(url).text
     doc = BeautifulSoup(page, "html.parser")
@@ -51,25 +50,32 @@ def main():
 
     items_found = []
 
+    print(f"Number of Pages :  {num_of_pages}")
+
     for page in range(1, num_of_pages + 1):
         url = f"https://www.newegg.ca/p/pl?d={product_name}&N=4131&page={page}"
         page = requests.get(url).text
         doc = BeautifulSoup(page, "html.parser")
 
         items_div = doc.find(class_="item-cells-wrap border-cells short-video-box items-grid-view four-cells expulsion-one-cell")
-        items = items_div.find_all(string=re.compile(product_name))
+        items = items_div.find_all('div',recursive=False)
 
-        for item_title in items:
-            parent = item_title.parent
-            item_link = None
-            if parent.name != "a":
-                continue
+        for item in items:
+            item = item.find('div')
 
-            item_link = parent["href"]
-            next_parent = item_title.find_parent(class_="item-container")
+            #Link
+            item_link_element = item.find('a',{'class':'item-img'})
+            item_link = item_link_element.get("href")
+            
+            # Title
+            item_info_div = item.find('div', {'class': 'item-info'})
+            item_title = None
+            title_element = item_info_div.find('a', {'class': 'item-title'}) if item_info_div else None
+            if title_element:
+                item_title = title_element.text
 
             # Extracting price
-            price_div = next_parent.find(class_="item-action")
+            price_div = item.find(class_="item-action")
             item_price = extract_price(price_div)
             
             items_found.append({
